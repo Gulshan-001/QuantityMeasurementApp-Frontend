@@ -1,0 +1,359 @@
+<!-- 
+  Quantity Measurement App - Main HTML File
+  
+  This file contains the complete structure of the web application.
+  It includes two main sections:
+  1. Authentication Overlay - For login/register
+  2. Main App - The calculator, history, and statistics sections
+  
+  All styling is in css/styles.css and logic is in js/ folder.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta tags for browser settings and responsiveness -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Quantity Measurement App — convert, compare, add, subtract and divide physical quantities like length, weight, volume, and temperature." />
+  <title>Quantity Measurement App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════ AUTH OVERLAY ═══════════════════ -->
+  <!-- This is the "gate" that users see first. They must log in or register before accessing the app. -->
+  <div id="auth-overlay" class="auth-overlay" role="dialog" aria-modal="true" aria-label="Authentication">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="logo-icon">⚗️</div>
+        <h1 class="logo-title">Quantity Measurement App</h1>
+        <p class="logo-subtitle">Accurate physical quantity calculations</p>
+      </div>
+: Toggle between Login and Register panels using buttons
+      <!-- Tab switcher -->
+      <div class="auth-tabs" role="tablist">
+        <button id="tab-login" class="auth-tab active" role="tab" aria-selected="true" aria-controls="panel-login" onclick="switchTab('login')">Login</button>
+        <button id="tab-register" class="auth-tab" role="tab" aria-selected="false" aria-controls="panel-register" onclick="switchTab('register')">Register</button>
+      </div>
+
+      <!-- Login Panel -->
+      <div id="panel-login" class="auth-panel active" role="tabpanel">
+        <form id="login-form" class="auth-form" novalidate>
+          <div class="form-group">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" name="email" placeholder="you@example.com" required autocomplete="email" />
+            <span class="field-error" id="login-email-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="login-password" name="password" placeholder="••••••••" required autocomplete="current-password" />
+              <button type="button" class="toggle-password" onclick="togglePassword('login-password', this)" aria-label="Show password">👁</button>
+            </div>
+            <span class="field-error" id="login-password-error"></span>
+          </div>
+          <div id="login-error" class="form-error hidden" role="alert"></div>
+          <button type="submit" id="btn-login" class="btn btn-primary btn-full">
+            <span class="btn-text">Sign In</span>
+            <span class="btn-spinner hidden"></span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Register Panel -->
+      <div id="panel-register" class="auth-panel" role="tabpanel">
+        <form id="register-form" class="auth-form" novalidate>
+          <div class="form-group">
+            <label for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" name="name" placeholder="John Doe" required autocomplete="name" />
+            <span class="field-error" id="reg-name-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="reg-email">Email</label>
+            <input type="email" id="reg-email" name="email" placeholder="you@example.com" required autocomplete="email" />
+            <span class="field-error" id="reg-email-error"></span>
+          </div>
+          <div class="form-group">
+            <label for="reg-password">Password</label>
+            <div class="input-wrapper">
+              <input type="password" id="reg-password" name="password" placeholder="Min 6 characters" required autocomplete="new-password" />
+              <button type="button" class="toggle-password" onclick="togglePassword('reg-password', this)" aria-label="Show password">👁</button>
+            </div>
+            <span class="field-error" id="reg-password-error"></span>
+          </div>
+          <div id="register-error" class="form-error hidden" role="alert"></div>
+          <div id="register-success" class="form-success hidden" role="status"></div>
+          <button type="submit" id="btn-register" class="btn btn-primary btn-full">
+            <span class="btn-text">Create Account</span>
+            <span class="btn-spinner hidden"></span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- This is the main application. It's hidden until user logs in successfully. -->
+  <!-- ═══════════════════ MAIN APP ═══════════════════ -->
+  <div id="main-app" class="main-app hidden">
+: Contains app title, navigation buttons, and logout button -->
+    <header class="app-header" role="banner">
+      <div class="header-inner">
+        <!-- App title and logo --role="banner">
+      <div class="header-inner">
+        <div class="header-brand">
+          <span class="brand-icon">⚗️</span>
+         !-- Main navigation menu with three sections: Calculator, History, Stats -->
+        <nav class="header-nav" role="navigation" aria-label="Main navigation">
+          <!-- Calculator button: Shows the main calculation form --
+        </div>
+        <nav class="header-nav" role="navigation" aria-label="Main navigation">
+          <button id="nav-calculator" class="nav-btn active" onclick="showSection('calculator')" title="Calculator">
+            <span class="nav-icon">🧮</span><span class="nav-label">Calculator</span>
+          </button>
+          <button id="nav-history" class="nav-btn" onclick="showSection('history')" title="History">
+            <span class="nav-icon">📜</span><span class="nav-label">History</span>
+          </button>
+          <button id="nav-stats" class="nav-btn" onclick="showSection('stats')" title="Statistics">
+            <span class="nav-icon">📊</span><span class="nav-label">Stats</span>
+          </button>
+        </nav>
+        <div class="header-actions">
+          <span id="user-greeting" class="user-greeting"></span>
+          <button id="btn-logout" class="btn btn-outline btn-sm" onclick="logout()" aria-label="Sign out">Sign Out</button>
+        </div>
+      </div>
+    </header>
+
+    <!-!-- The main calculation interface. Users select measurement type, operation, and values here. -->
+      <- MAIN CONTENT -->
+    <main class="app-content" role="main">
+
+      <!-- ── CALCULATOR SECTION ── -->
+      <section id="section-calculator" class="content-section active" aria-labelledby="calc-heading">
+        <div class="section-header">
+          <h2 id="calc-heading" class=: Choose from Length, Weight, Volume, Temperature"section-title">Quantity Calculator</h2>
+          <p class="section-subtitle">Perform operations on physical quantities</p>
+        </div>
+
+        <!-- Measurement Type Selector -->
+        <div class="type-grid" role="group" aria-label="Select measurement type">
+          <button class="type-card" data-type="Length" onclick="selectType('Length')">
+            <span class="type-icon">📏</span>
+            <span class="type-name">Length</span>
+          </button>
+          <button class="type-card" data-type="Weight" onclick="selectType('Weight')">
+            <span class="type-icon">⚖️</span>
+            <span class="type-name">Weight</span>
+          </button>
+          <button class="type-card" data-type="Volume" onclick="selectType('Volume')">
+            <span class="type-icon">🧪</span>
+            <span class="type-name">Volume</span>
+          </button>
+          <button class="type-card" data-type="Temperature" onclick="selectType('Temperature')">
+            <span class="type-icon">🌡️</span>
+            <span class="type-n: Choose operation (Convert, Compare, Add, Subtract, Divide)ame">Temperature</span>
+          </button>
+        </div>
+
+        <!-- Operation Selector -->
+        <div class="operation-grid" role="group" aria-label="Select operation">
+          <button class="op-card active" data-op="convert" id="op-convert" onclick="selectOperation('convert')">
+            <span class="op-icon">🔄</span>
+            <span class="op-name">Convert</span>
+          </button>
+          <button class="op-card" data-op="compare" id="op-compare" onclick="selectOperation('compare')">
+            <span class="op-icon">⚖️</span>
+            <span class="op-name">Compare</span>
+          </button>
+          <button class="op-card" data-op="add" id="op-add" onclick="selectOperation('add')">
+            <span class="op-icon">➕</span>
+            <span class="op-name">Add</span>
+          </button>
+          <button class="op-card" data-op="subtract" id="op-subtract" onclick="selectOperation('subtract')">
+            <span class="op-icon">➖</span>
+            <span class="op-name">Subtract</span>
+          </button>
+          <button class="op-card" data-op="divide" id="op-divide" onclick="selectOperation('divide')">
+            <span class="op-icon">➗</span>
+            <span class="op-name">Divide</span>
+          </button>: Input fields for values and units, submission button
+        </div>
+
+        <!-- Calculator Form -->
+        <div !-- Hidden field to store selected measurement type (set by selectType function) -->
+            <input type="hidden" id="measure-type" value="">
+
+            <!-- Quantity 1: First value and unit input
+            <input type="hidden" id="measure-type" value="">
+
+            <!-- Quantity 1 -->
+            <div class="quantity-card" id="q1-card">
+              <div class="quantity-label">
+                <span class="quantity-badge q1-badge">Q1</span>
+                <span>First Quantity</span>
+              </div>
+              <div class="calc-row two-col">
+                <div class="form-group">
+                  <label for="q1-value">Value</label>
+                  <input type="number" id="q1-value" placeholder="e.g. 100" step="any" required />
+                  <span class="field-error" id="q1-value-error"></span>
+                </div>
+                <div class="form-group">
+                  <label for="q1-unit">Unit</label>
+                  <select id="q1-unit" class="select-styled" required>
+                    <option value="">— Select unit —</option>
+                  </select>
+                  <span class="field-error" id="q1-unit-error"></span>
+                </div>
+              </div>
+            </div>: Only shown for operations that need two quantities (Compare, Add, Subtract, Divide
+
+            <!-- Second Quantity (hidden for convert) -->
+            <div class="quantity-card" id="q2-card">
+              <div class="quantity-label">
+                <span class="quantity-badge q2-badge">Q2</span>
+                <span>Second Quantity</span>
+              </div>
+              <div class="calc-row two-col">
+                <div class="form-group">
+                  <label for="q2-value">Value</label>
+                  <input type="number" id="q2-value" placeholder="e.g. 50" step="any" />
+                  <span class="field-error" id="q2-value-error"></span>
+                </div>
+                <div class="form-group">
+                  <label for="q2-unit">Unit</label>
+                  <select id="q2-unit" class="select-styled">
+                    <option value="">— Select unit —</option>
+                  </select>
+                  <span class="field-error" id="q2-unit-error"></span>
+                </div>
+              </div>
+            </div>
+: Only shown for convert operation. Specifies what unit to convert to.
+            <!-- Target Unit (for convert only) -->
+            <div class="quantity-card" id="target-card" style="display:none;">
+              <div class="quantity-label">
+                <span class="quantity-badge target-badge">→</span>
+                <span>Target Unit</span>
+              </div>
+              <div class="form-group">
+                <label for="target-unit">Convert To</label>
+                <select id="target-unit" class="select-styled">
+                  <option value="">— Select target unit —</option>
+                </select>
+                <span class="field-error" id="target-unit-error"></span>
+              </div>
+            </div>
+s: Calculate button sends request, Reset button clears form
+            <!-- Action Button -->
+            <div class="calc-actions">
+              <button type="submit" id="btn-calculate" class="btn btn-primary btn-lg">
+                <span class="btn-text" id="calc-btn-text">Calculate</span>
+                <span class="btn-spinner hidden" id="calc-spinner"></span>
+              </button>
+              <button type="button" class="btn btn-ghost" onclick="resetForm()">Reset</button>
+            </div>
+
+            <div id="calc-error" class="form-error hidden" role="alert"></div>
+          </form>
+: Shows the result after successful calculation
+          <!-- Result Panel -->
+          <div id="result-panel" class="result-panel hidden" role="region" aria-live="polite" aria-label="Result">
+            <div class="result-header">
+              <span class="result-label">Result</span>
+              <button class="result-close" onclick="closeResult()" aria-label="Close result">✕</button>
+            </div>
+            <div class="result-body">
+              <div id="result-icon" class="result-icon"></div>
+              <div id="result-value" class="result-value"></div>
+              <div id="result-message" class="result-message"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Shows all previous calculations with filtering by operation type -->
+      <!-- ── HISTORY SECTION ── -->
+      <section id="section-history" class="content-section" aria-labelledby="hist-heading">
+        <div class="section-header">
+          <h2 id="hist-heading" class="section-title">Operation History</h2>
+          <p class="section-subtitle">View your past calculations</p>
+        <!-- History controls: Filter dropdown and refresh button -->
+        <div class="history-controls">
+          <!-- Filter by operation type --
+
+        <div class="history-controls">
+          <div class="filter-group">
+            <label for="filter-op" class="sr-only">Filter by operation</label>
+            <select id="filter-op" class="select-styled select-sm" onchange="filterHistory(this.value)">
+              <option value="all">All Operations</option>
+              <option value="convert">Convert</option>
+              <option value="compare">Compare</option>
+              <option value="add">Add</option>
+              <option value="subtract">Subtract</option>
+              <option value="divide">Divide</option>
+            </select>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="loadHistory()" id="btn-refresh-history">
+            <span>🔄</span> Refresh
+          </button>
+        </div>
+
+        <div id="history-loading" class="loading-state hidden">
+          <div class="spinner"></div>
+          <p>Loading history…</p>
+        </div>
+        <div id="history-empty" class="empty-state hidden">
+          <div class="empty-icon">📭</div>
+          <p>No history found.</p>
+        </div>
+        <div id="history-error" class="form-error hidden" role="alert"></div>
+
+       !-- Shows statistics: count of how many times each operation was performed -->
+      < <div id="history-grid" class="history-grid"></div>
+      </section>
+
+      <!-- ── STATS SECTION ── -->
+      <section id="section-stats" class="content-section" aria-labelledby="stats-heading">
+        <div class="section-header">
+          <h2 id="stats-heading" class="section-title">Operation Statistics</h2>
+          <p class="section-subtitle">Count of each operation performed</p>
+        </div>
+
+        <div id="stats-loading" class="loading-state hidden">
+          <div class="spinner"></div>
+          <p>Loading statistics…</p>
+        </div>
+        <div id="stats-error" class="form-error hidden" role="alert"></div>
+
+        <div id="stats-grid" class="stats-grid">
+          <!-- populated by JS -->
+        </div>
+
+        <button class="btn btn-outline" onclick="loadStats()" style="margin-top:1.5rem;">🔄 Refresh Stats</button>
+      </section>
+
+    </main>
+
+    <!-- TOAST -->
+    <div id="toast-container" class="toast-container" role="region" aria-live="polite" aria-label="Notifications"></div>
+
+    <!-- FOOTER -->
+    <footer class="app-footer" role="contentinfo">
+      <p>Quantity Measurement App &copy; 2026 &mdash; Quantity Measurement Application</p>
+    </footer>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/units.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
