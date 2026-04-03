@@ -24,16 +24,16 @@
 <body>
 
   <!-- ═══════════════════ AUTH OVERLAY ═══════════════════ -->
-  <!-- This is the "gate" that users see first. They must log in or register before accessing the app. -->
-  <div id="auth-overlay" class="auth-overlay" role="dialog" aria-modal="true" aria-label="Authentication">
+  <!-- This is the "gate" that users see when they need to log in. Hidden by default, shown when accessing protected sections. -->
+  <div id="auth-overlay" class="auth-overlay hidden" role="dialog" aria-modal="true" aria-label="Authentication">
     <div class="auth-card">
+      <button id="btn-close-auth" class="auth-close" onclick="closeLoginOverlay()" aria-label="Close login">✕</button>
       <div class="auth-logo">
         <div class="logo-icon">⚗️</div>
         <h1 class="logo-title">Quantity Measurement App</h1>
         <p class="logo-subtitle">Accurate physical quantity calculations</p>
       </div>
-: Toggle between Login and Register panels using buttons
-      <!-- Tab switcher -->
+      <!-- Tab switcher: Toggle between Login and Register panels using buttons -->
       <div class="auth-tabs" role="tablist">
         <button id="tab-login" class="auth-tab active" role="tab" aria-selected="true" aria-controls="panel-login" onclick="switchTab('login')">Login</button>
         <button id="tab-register" class="auth-tab" role="tab" aria-selected="false" aria-controls="panel-register" onclick="switchTab('register')">Register</button>
@@ -95,21 +95,20 @@
     </div>
   </div>
 
-  <!-- This is the main application. It's hidden until user logs in successfully. -->
+  <!-- This is the main application. Visible by default. Auth sections (History/Stats) require login. -->
   <!-- ═══════════════════ MAIN APP ═══════════════════ -->
-  <div id="main-app" class="main-app hidden">
-: Contains app title, navigation buttons, and logout button -->
+  <div id="main-app" class="main-app">
+    <!-- Contains app title, navigation buttons, and logout button -->
     <header class="app-header" role="banner">
       <div class="header-inner">
-        <!-- App title and logo --role="banner">
-      <div class="header-inner">
+        <!-- App title and logo -->
         <div class="header-brand">
           <span class="brand-icon">⚗️</span>
-         !-- Main navigation menu with three sections: Calculator, History, Stats -->
-        <nav class="header-nav" role="navigation" aria-label="Main navigation">
-          <!-- Calculator button: Shows the main calculation form --
+          <h1 class="brand-title">Quantity Measurement App</h1>
         </div>
+        <!-- Main navigation menu with three sections: Calculator, History, Stats -->
         <nav class="header-nav" role="navigation" aria-label="Main navigation">
+          <!-- Calculator button: Shows the main calculation form -->
           <button id="nav-calculator" class="nav-btn active" onclick="showSection('calculator')" title="Calculator">
             <span class="nav-icon">🧮</span><span class="nav-label">Calculator</span>
           </button>
@@ -121,20 +120,22 @@
           </button>
         </nav>
         <div class="header-actions">
-          <span id="user-greeting" class="user-greeting"></span>
-          <button id="btn-logout" class="btn btn-outline btn-sm" onclick="logout()" aria-label="Sign out">Sign Out</button>
+          <span id="user-greeting" class="user-greeting hidden"></span>
+          <button id="btn-login-header" class="btn btn-primary btn-sm" onclick="showLoginOverlay()" aria-label="Sign in">Sign In</button>
+          <button id="btn-logout" class="btn btn-outline btn-sm hidden" onclick="logout()" aria-label="Sign out">Sign Out</button>
         </div>
       </div>
     </header>
 
-    <!-!-- The main calculation interface. Users select measurement type, operation, and values here. -->
-      <- MAIN CONTENT -->
+    <!-- The main calculation interface. Users select measurement type, operation, and values here. -->
+    <!-- MAIN CONTENT -->
     <main class="app-content" role="main">
 
       <!-- ── CALCULATOR SECTION ── -->
       <section id="section-calculator" class="content-section active" aria-labelledby="calc-heading">
         <div class="section-header">
-          <h2 id="calc-heading" class=: Choose from Length, Weight, Volume, Temperature"section-title">Quantity Calculator</h2>
+          <!-- Choose from Length, Weight, Volume, Temperature -->
+          <h2 id="calc-heading" class="section-title">Quantity Calculator</h2>
           <p class="section-subtitle">Perform operations on physical quantities</p>
         </div>
 
@@ -154,7 +155,7 @@
           </button>
           <button class="type-card" data-type="Temperature" onclick="selectType('Temperature')">
             <span class="type-icon">🌡️</span>
-            <span class="type-n: Choose operation (Convert, Compare, Add, Subtract, Divide)ame">Temperature</span>
+            <span class="type-name">Temperature</span>
           </button>
         </div>
 
@@ -179,15 +180,16 @@
           <button class="op-card" data-op="divide" id="op-divide" onclick="selectOperation('divide')">
             <span class="op-icon">➗</span>
             <span class="op-name">Divide</span>
-          </button>: Input fields for values and units, submission button
+          </button>
+          <!-- Choose operation (Convert, Compare, Add, Subtract, Divide) -->
         </div>
 
         <!-- Calculator Form -->
-        <div !-- Hidden field to store selected measurement type (set by selectType function) -->
-            <input type="hidden" id="measure-type" value="">
+        <div class="calc-form">
+          <!-- Hidden field to store selected measurement type (set by selectType function) -->
+          <input type="hidden" id="measure-type" value="">
 
-            <!-- Quantity 1: First value and unit input
-            <input type="hidden" id="measure-type" value="">
+          <!-- Quantity 1: First value and unit input -->
 
             <!-- Quantity 1 -->
             <div class="quantity-card" id="q1-card">
@@ -209,7 +211,8 @@
                   <span class="field-error" id="q1-unit-error"></span>
                 </div>
               </div>
-            </div>: Only shown for operations that need two quantities (Compare, Add, Subtract, Divide
+            </div>
+            <!-- Only shown for operations that need two quantities (Compare, Add, Subtract, Divide) -->
 
             <!-- Second Quantity (hidden for convert) -->
             <div class="quantity-card" id="q2-card">
@@ -232,7 +235,7 @@
                 </div>
               </div>
             </div>
-: Only shown for convert operation. Specifies what unit to convert to.
+            <!-- Only shown for convert operation. Specifies what unit to convert to. -->
             <!-- Target Unit (for convert only) -->
             <div class="quantity-card" id="target-card" style="display:none;">
               <div class="quantity-label">
@@ -247,7 +250,7 @@
                 <span class="field-error" id="target-unit-error"></span>
               </div>
             </div>
-s: Calculate button sends request, Reset button clears form
+            <!-- Calculate button sends request, Reset button clears form -->
             <!-- Action Button -->
             <div class="calc-actions">
               <button type="submit" id="btn-calculate" class="btn btn-primary btn-lg">
@@ -259,7 +262,7 @@ s: Calculate button sends request, Reset button clears form
 
             <div id="calc-error" class="form-error hidden" role="alert"></div>
           </form>
-: Shows the result after successful calculation
+          <!-- Shows the result after successful calculation -->
           <!-- Result Panel -->
           <div id="result-panel" class="result-panel hidden" role="region" aria-live="polite" aria-label="Result">
             <div class="result-header">
@@ -281,9 +284,10 @@ s: Calculate button sends request, Reset button clears form
         <div class="section-header">
           <h2 id="hist-heading" class="section-title">Operation History</h2>
           <p class="section-subtitle">View your past calculations</p>
+        </div>
         <!-- History controls: Filter dropdown and refresh button -->
         <div class="history-controls">
-          <!-- Filter by operation type --
+          <!-- Filter by operation type -->
 
         <div class="history-controls">
           <div class="filter-group">
@@ -312,8 +316,8 @@ s: Calculate button sends request, Reset button clears form
         </div>
         <div id="history-error" class="form-error hidden" role="alert"></div>
 
-       !-- Shows statistics: count of how many times each operation was performed -->
-      < <div id="history-grid" class="history-grid"></div>
+        <!-- Shows all previous calculations with filtering by operation type -->
+        <div id="history-grid" class="history-grid"></div>
       </section>
 
       <!-- ── STATS SECTION ── -->

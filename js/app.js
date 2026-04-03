@@ -30,12 +30,19 @@
  * @param {string} name - Section name: 'calculator', 'history', or 'stats'
  * 
  * Does:
- * 1. Hides all sections
- * 2. Shows the requested section
- * 3. Updates navigation button active states
- * 4. Lazy-loads data (history & stats only load when clicked)
+ * 1. Check if section requires authentication
+ * 2. Hides all sections
+ * 3. Shows the requested section
+ * 4. Updates navigation button active states
+ * 5. Lazy-loads data (history & stats only load when clicked)
  */
 function showSection(name) {
+  // Check authentication for protected sections
+  if ((name === 'history' || name === 'stats') && !isAuthenticated) {
+    showLoginOverlay();
+    return;
+  }
+
   // Hide all sections
   document.querySelectorAll('.content-section').forEach(sec => {
     sec.classList.remove('active');

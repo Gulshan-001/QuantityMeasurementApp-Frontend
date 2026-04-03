@@ -33,6 +33,13 @@ const mainApp       = document.getElementById('main-app');       // Main app (sh
 const loginForm     = document.getElementById('login-form');     // Login form element
 const registerForm  = document.getElementById('register-form');  // Register form element
 const userGreeting  = document.getElementById('user-greeting');  // "Hi, Username" text
+const btnLogout     = document.getElementById('btn-logout');     // Logout button
+const btnLoginHeader = document.getElementById('btn-login-header'); // Login button in header
+
+// ═════════════════════════════════════════════════════
+// AUTHENTICATION STATE
+// ═════════════════════════════════════════════════════
+let isAuthenticated = false;  // Track if user is logged in
 
 // ═════════════════════════════════════════════════════
 // TAB SWITCHING: Toggle between Login and Register
@@ -79,6 +86,25 @@ function clearAuthErrors() {
   document.querySelectorAll('input').forEach(el => {
     el.classList.remove('is-invalid', 'is-valid');
   });
+}
+
+/**
+ * Show the login overlay
+ * Called when user tries to access protected sections (History, Stats)
+ */
+function showLoginOverlay() {
+  authOverlay.classList.remove('hidden');
+  switchTab('login');
+  clearAuthErrors();
+}
+
+/**
+ * Close the login overlay and return to calculator
+ * Called when user clicks the close button (X)
+ */
+function closeLoginOverlay() {
+  authOverlay.classList.add('hidden');
+  showSection('calculator');  // Return to calculator
 }
 
 // ═════════════════════════════════════════════════════
@@ -335,12 +361,15 @@ function parseJwtPayload(token) {
  * Hide authentication panel, display greeting
  */
 function showAuthenticatedUI(user) {
+  isAuthenticated = true;
   authOverlay.classList.add('hidden');      // Hide login/register
-  mainApp.classList.remove('hidden');       // Show calculator, history, stats
 
-  // Show user greeting
+  // Show user greeting and logout button
   const displayName = user?.name || user?.email || 'User';
   userGreeting.textContent = `👋 ${displayName}`;
+  userGreeting.classList.remove('hidden');
+  btnLogout.classList.remove('hidden');
+  btnLoginHeader.classList.add('hidden');
 
   // Load initial section
   showSection('calculator');
@@ -348,15 +377,19 @@ function showAuthenticatedUI(user) {
 
 /**
  * Log out the user
- * Clear token, hide app, show login panel
+ * Clear token, hide logout button, show login button
  */
 function logout() {
+  isAuthenticated = false;
   removeToken();    // Delete JWT token
   removeUser();     // Delete user info
   
-  mainApp.classList.add('hidden');      // Hide main app
-  authOverlay.classList.remove('hidden');  // Show login panel
-  
+  // Update header: hide logout button, show login button
+  userGreeting.classList.add('hidden');
+  userGreeting.textContent = '';
+  btnLogout.classList.add('hidden');
+  btnLoginHeader.classList.remove('hidden');
+
   loginForm.reset();      // Clear form inputs
   registerForm.reset();
   clearAuthErrors();      // Clear error messages
