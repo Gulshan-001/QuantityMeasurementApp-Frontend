@@ -1,0 +1,53 @@
+<div class="history-page fade-in">
+  <!-- Header & Filter -->
+  <header class="page-header">
+    <div class="title-area">
+      <h2 class="page-title">Operation History</h2>
+      <p class="page-subtitle">View your past calculations</p>
+    </div>
+
+    <div class="filter-area">
+      <div class="native-select-wrapper">
+        <label class="select-label">Filter by Operation</label>
+        <select
+          id="history-filter-select"
+          class="native-select"
+          [(ngModel)]="filterValue"
+          (change)="onFilterChange(filterValue)">
+          <option value="all">All Operations</option>
+          <option *ngFor="let op of operations" [value]="op.key">{{ op.label }}</option>
+        </select>
+        <span class="select-arrow">▾</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="page-body">
+    <!-- Loading State -->
+    <app-loading-spinner *ngIf="loading" message="Loading history..."></app-loading-spinner>
+
+    <!-- Error State -->
+    <app-empty-state *ngIf="!loading && error" 
+                     icon="⚠️" 
+                     title="Error Loading Data" 
+                     [message]="error">
+      <button class="btn btn-outline mt-3" (click)="loadHistory()">Try Again</button>
+    </app-empty-state>
+
+    <!-- Empty State -->
+    <app-empty-state *ngIf="!loading && !error && filteredHistory.length === 0" 
+                     icon="📭" 
+                     title="No History Found" 
+                     message="You haven't performed any calculations yet.">
+    </app-empty-state>
+
+    <!-- History List -->
+    <div *ngIf="!loading && !error && filteredHistory.length > 0" class="history-list">
+      <app-history-card 
+        *ngFor="let item of filteredHistory" 
+        [item]="item">
+      </app-history-card>
+    </div>
+  </div>
+</div>

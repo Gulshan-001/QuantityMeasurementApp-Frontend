@@ -1,0 +1,134 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  @include flex-center;
+  z-index: 1000;
+  padding: $sp-4;
+  background: linear-gradient(135deg, hsl(262, 60%, 12%), hsl(222, 35%, 7%), hsl(186, 40%, 8%));
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle 2px at 20% 30%, hsla(262, 83%, 68%, 0.4) 0%, transparent 100%),
+      radial-gradient(circle 2px at 80% 20%, hsla(186, 100%, 55%, 0.3) 0%, transparent 100%),
+      radial-gradient(circle 3px at 60% 70%, hsla(262, 83%, 68%, 0.2) 0%, transparent 100%),
+      radial-gradient(circle 1px at 40% 80%, hsla(186, 100%, 55%, 0.25) 0%, transparent 100%);
+    animation: float-bg 8s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+}
+
+.auth-card {
+  background: $clr-surface;
+  border: 1px solid $clr-border;
+  border-radius: $radius-xl;
+  padding: $sp-10 $sp-8;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: $shadow-lg, $shadow-glow;
+  animation: slide-up 0.5s ease both;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, $clr-primary, $clr-accent);
+    border-radius: $radius-xl $radius-xl 0 0;
+  }
+
+  @include responsive(sm) {
+    padding: $sp-6 $sp-4;
+  }
+}
+
+.auth-close {
+  position: absolute;
+  top: $sp-4;
+  right: $sp-4;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: $clr-txt-muted;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: $radius-md;
+  @include flex-center;
+  transition: all $tr-normal;
+  z-index: 10;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: $clr-txt;
+  }
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: $sp-8;
+}
+
+.logo-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: $sp-3;
+  animation: bounce-in 0.5s ease both;
+}
+
+.logo-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  @include gradient-text;
+
+  @include responsive(sm) {
+    font-size: 1.6rem;
+  }
+}
+
+.logo-subtitle {
+  color: $clr-txt-muted;
+  font-size: 0.9rem;
+  margin-top: $sp-1;
+}
+
+.auth-tabs {
+  display: flex;
+  background: $clr-surface-2;
+  border-radius: $radius-md;
+  padding: $sp-1;
+  margin-bottom: $sp-6;
+  gap: $sp-1;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: $sp-2 $sp-4;
+  background: transparent;
+  border: none;
+  border-radius: calc(#{$radius-md} - 2px);
+  color: $clr-txt-muted;
+  font-family: $font-body;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $tr-normal;
+
+  &.active {
+    background: $clr-primary;
+    color: #fff;
+    box-shadow: 0 2px 12px $clr-primary-glow;
+  }
+}
+
+.auth-panel {
+  animation: fade-in 0.25s ease;
+}

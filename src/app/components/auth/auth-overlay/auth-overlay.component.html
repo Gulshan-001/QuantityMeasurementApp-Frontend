@@ -1,0 +1,33 @@
+<div class="auth-overlay" role="dialog" aria-modal="true" aria-label="Authentication">
+  <div class="auth-card">
+    <!-- Close Button -->
+    <button class="auth-close" (click)="closeOverlay()" aria-label="Close login">✕</button>
+
+    <!-- Logo -->
+    <div class="auth-logo">
+      <div class="logo-icon">⚗️</div>
+      <h1 class="logo-title">Quantity Measurement App</h1>
+      <p class="logo-subtitle">Accurate physical quantity calculations</p>
+    </div>
+
+    <!-- Tab Switcher -->
+    <div class="auth-tabs" role="tablist">
+      <button class="auth-tab" [class.active]="activeTab === 'login'"
+              role="tab" [attr.aria-selected]="activeTab === 'login'"
+              (click)="switchTab('login')">Login</button>
+      <button class="auth-tab" [class.active]="activeTab === 'register'"
+              role="tab" [attr.aria-selected]="activeTab === 'register'"
+              (click)="switchTab('register')">Register</button>
+    </div>
+
+    <!-- Login Panel (Conditional Rendering) -->
+    <div *ngIf="activeTab === 'login'" class="auth-panel" role="tabpanel">
+      <app-login-form (loginSuccess)="onLoginSuccess()"></app-login-form>
+    </div>
+
+    <!-- Register Panel (Conditional Rendering) -->
+    <div *ngIf="activeTab === 'register'" class="auth-panel" role="tabpanel">
+      <app-register-form (registerSuccess)="onRegisterSuccess()"></app-register-form>
+    </div>
+  </div>
+</div>

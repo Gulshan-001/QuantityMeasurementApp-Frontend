@@ -1,0 +1,10 @@
+<div class="operation-grid" role="group" aria-label="Select operation">
+  <button *ngFor="let op of operations"
+          class="op-card"
+          [class.active]="op.key === selectedOperation"
+          [attr.data-op]="op.key"
+          (click)="onSelectOperation(op.key)">
+    <span class="op-icon">{{ op.icon }}</span>
+    <span class="op-name">{{ op.label }}</span>
+  </button>
+</div>

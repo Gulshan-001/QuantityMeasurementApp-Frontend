@@ -1,0 +1,70 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.auth-form {
+  @include flex-column($sp-5);
+}
+
+.full-width { width: 100%; }
+
+.form-error {
+  background: hsla(3, 85%, 62%, 0.12);
+  border: 1px solid $clr-error;
+  border-radius: $radius-md;
+  padding: $sp-3 $sp-4;
+  font-size: 0.88rem;
+  color: $clr-error;
+  text-align: center;
+  animation: fade-in 0.25s ease;
+}
+
+.form-success {
+  background: hsla(145, 63%, 52%, 0.12);
+  border: 1px solid $clr-success;
+  border-radius: $radius-md;
+  padding: $sp-3 $sp-4;
+  font-size: 0.88rem;
+  color: $clr-success;
+  text-align: center;
+  animation: fade-in 0.25s ease;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: $sp-3 $sp-6;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: $font-body;
+  border-radius: $radius-md !important;
+  background: linear-gradient(135deg, $clr-primary, $clr-primary-dk) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 20px $clr-primary-glow;
+  transition: all $tr-normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $sp-2;
+  min-height: 44px;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px $clr-primary-glow;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+::ng-deep {
+  .mat-mdc-form-field {
+    .mdc-text-field--filled {
+      background-color: $clr-surface-3 !important;
+      border-radius: $radius-md $radius-md 0 0;
+    }
+  }
+  .mat-mdc-icon-button {
+    color: $clr-txt-muted !important;
+  }
+}

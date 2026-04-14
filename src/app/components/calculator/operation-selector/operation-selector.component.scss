@@ -1,0 +1,62 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.operation-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: $sp-3;
+  margin-bottom: $sp-8;
+
+  @include responsive(lg) { grid-template-columns: repeat(3, 1fr); }
+  @include responsive(sm) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.op-card {
+  @include flex-column($sp-2);
+  align-items: center;
+  padding: $sp-5 $sp-3;
+  @include card-base;
+  cursor: pointer;
+  font-family: $font-body;
+  color: $clr-txt-muted;
+  border: 1.5px solid $clr-border;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 60%, $clr-primary-glow);
+    opacity: 0;
+    transition: opacity $tr-normal;
+  }
+
+  &:hover::before { opacity: 1; }
+
+  &:hover {
+    border-color: $clr-primary;
+    color: $clr-txt;
+    transform: translateY(-3px);
+    box-shadow: $shadow-md, 0 0 18px $clr-primary-glow;
+  }
+
+  &.active {
+    background: linear-gradient(135deg, hsl(262, 50%, 18%), hsl(262, 40%, 14%));
+    border-color: $clr-primary;
+    color: $clr-primary;
+    box-shadow: $shadow-glow;
+    transform: translateY(-2px);
+  }
+}
+
+.op-icon {
+  font-size: 1.7rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.op-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

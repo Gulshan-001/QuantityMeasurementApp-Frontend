@@ -1,0 +1,39 @@
+<!-- Only display if there is a result or error -->
+<div *ngIf="result !== null || error" class="result-panel" [ngClass]="{'has-error': error}" role="region" aria-live="polite">
+  <div class="result-header">
+    <h3 class="result-title">
+      <span class="result-icon">{{ error ? '⚠️' : '🎯' }}</span>
+      {{ error ? 'Calculation Error' : 'Result' }}
+    </h3>
+    <button class="close-btn" (click)="onClose()" aria-label="Clear result">✕</button>
+  </div>
+
+  <div class="result-body">
+    <!-- Error State -->
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <!-- Success State -->
+    <div *ngIf="!error && result !== null" class="success-content">
+
+      <!-- Textual/Boolean Result -->
+      <div *ngIf="isTextResult()" class="string-result">
+        <span class="value">{{ getTextResult() }}</span>
+      </div>
+
+      <!-- Simple Value/Unit Result (convert, add, subtract) -->
+      <div *ngIf="!isComplexResult() && !isTextResult()" class="simple-result">
+        <span class="value">{{ getResultValue() | number:'1.0-4' }}</span>
+        <span class="unit">{{ getResultUnit() }}</span>
+      </div>
+
+      <!-- Complex Result -->
+      <div *ngIf="isComplexResult()" class="complex-result">
+         <div class="comparison-result">
+           {{ result | json }}
+         </div>
+      </div>
+    </div>
+  </div>
+</div>

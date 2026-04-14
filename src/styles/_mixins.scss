@@ -1,0 +1,89 @@
+// ═══════════════════════════════════════════════════════════
+// _mixins.scss — Reusable SCSS Mixins
+// ═══════════════════════════════════════════════════════════
+@use 'variables' as *;
+
+// Responsive Media Query Mixin
+@mixin responsive($bp) {
+  @if $bp == sm { @media (max-width: $bp-sm)  { @content; } }
+  @if $bp == md { @media (max-width: $bp-md)  { @content; } }
+  @if $bp == lg { @media (max-width: $bp-lg)  { @content; } }
+  @if $bp == xl { @media (max-width: $bp-xl)  { @content; } }
+}
+
+@mixin min-responsive($bp) {
+  @if $bp == sm { @media (min-width: $bp-sm)  { @content; } }
+  @if $bp == md { @media (min-width: $bp-md)  { @content; } }
+  @if $bp == lg { @media (min-width: $bp-lg)  { @content; } }
+  @if $bp == xl { @media (min-width: $bp-xl)  { @content; } }
+}
+
+// Glassmorphism Effect
+@mixin glassmorphism($bg: rgba(17, 20, 33, 0.85), $blur: 20px) {
+  background: $bg;
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+}
+
+// Glow Border Effect
+@mixin glow-border($color: $clr-primary, $intensity: 0.35) {
+  border: 1.5px solid $color;
+  box-shadow: 0 0 20px rgba($color, $intensity);
+}
+
+// Card Base
+@mixin card-base {
+  background: $clr-surface;
+  border: 1.5px solid $clr-border;
+  border-radius: $radius-lg;
+  transition: all $tr-normal;
+  position: relative;
+  overflow: hidden;
+}
+
+// Gradient Text
+@mixin gradient-text($from: $clr-primary, $to: $clr-accent) {
+  background: linear-gradient(135deg, $from, $to);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Flex Center
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Flex Column
+@mixin flex-column($gap: 0) {
+  display: flex;
+  flex-direction: column;
+  @if $gap != 0 {
+    gap: $gap;
+  }
+}
+
+// Truncate Text
+@mixin truncate($max-width: 160px) {
+  max-width: $max-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Button Shimmer
+@mixin shimmer-hover {
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.08) 50%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 500ms ease;
+  }
+  &:hover::after {
+    transform: translateX(100%);
+  }
+}

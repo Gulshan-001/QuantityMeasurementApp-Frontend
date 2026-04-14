@@ -1,0 +1,159 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+// ─── Card Shell ───
+.history-card {
+  background: $clr-surface;
+  border: 1px solid $clr-border;
+  border-radius: $radius-lg;
+  padding: $sp-5 $sp-6;
+  transition: border-color $tr-fast, box-shadow $tr-fast, transform $tr-fast;
+  position: relative;
+  overflow: hidden;
+
+  // Subtle left accent bar by operation type
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    border-radius: $radius-lg 0 0 $radius-lg;
+    background: $clr-primary;
+    opacity: 0.6;
+  }
+
+  &:hover {
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 4px 24px rgba(139, 92, 246, 0.12);
+    transform: translateY(-1px);
+  }
+
+  // Per-operation accent colours
+  &.op-add::before    { background: hsl(145, 63%, 52%); }
+  &.op-subtract::before { background: hsl(3, 85%, 62%); }
+  &.op-divide::before { background: hsl(186, 100%, 55%); }
+  &.op-compare::before { background: hsl(38, 95%, 60%); }
+  &.op-convert::before { background: hsl(262, 83%, 68%); }
+}
+
+// ─── Header ───
+.hc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $sp-4;
+  gap: $sp-4;
+  flex-wrap: wrap;
+}
+
+.hc-badges {
+  display: flex;
+  gap: $sp-2;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: $radius-full;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.op-badge {
+  background: rgba(139, 92, 246, 0.15);
+  color: hsl(262, 83%, 78%);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+
+  .icon { font-size: 0.85rem; }
+}
+
+.type-badge {
+  background: rgba(255, 255, 255, 0.06);
+  color: $clr-txt-muted;
+  border: 1px solid $clr-border;
+}
+
+.fail-badge {
+  background: rgba(220, 53, 69, 0.15);
+  color: hsl(354, 70%, 65%);
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.hc-date {
+  font-size: 0.8rem;
+  color: $clr-txt-muted;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+// ─── Body: Input ➜ Result ───
+.hc-body {
+  padding-top: $sp-2;
+}
+
+.expr-wrap {
+  display: flex;
+  align-items: center;
+  gap: $sp-4;
+  flex-wrap: wrap;
+
+  @include responsive(sm) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $sp-3;
+  }
+}
+
+.expr-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.expr-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $clr-txt-muted;
+}
+
+.expr-value {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: $clr-txt;
+  word-break: break-word;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+.result-value {
+  color: hsl(145, 63%, 60%);
+  font-weight: 600;
+}
+
+.fail-text {
+  color: hsl(354, 70%, 65%);
+}
+
+.arrow-block {
+  font-size: 1.2rem;
+  color: $clr-primary;
+  opacity: 0.7;
+  flex-shrink: 0;
+  padding-top: $sp-4; // Align with value row
+
+  @include responsive(sm) {
+    padding-top: 0;
+    transform: rotate(90deg);
+    align-self: center;
+  }
+}

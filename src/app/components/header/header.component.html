@@ -1,0 +1,35 @@
+<header class="app-header" role="banner">
+  <div class="header-inner">
+    <!-- Brand -->
+    <div class="header-brand">
+      <span class="brand-icon">⚗️</span>
+      <h1 class="brand-title">Quantity Measurement App</h1>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-btn" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+      <span [ngClass]="{'open': mobileMenuOpen}">☰</span>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="header-nav" [ngClass]="{'mobile-open': mobileMenuOpen}" role="navigation" aria-label="Main navigation">
+      <a class="nav-btn" routerLink="/calculator" routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">
+        <span class="nav-icon">🧮</span><span class="nav-label">Calculator</span>
+      </a>
+      <a class="nav-btn" routerLink="/history" routerLinkActive="active" (click)="closeMobileMenu()">
+        <span class="nav-icon">📜</span><span class="nav-label">History</span>
+      </a>
+      <a class="nav-btn" routerLink="/stats" routerLinkActive="active" (click)="closeMobileMenu()">
+        <span class="nav-icon">📊</span><span class="nav-label">Stats</span>
+      </a>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <span class="user-greeting" *ngIf="isAuthenticated">👋 {{ userName }}</span>
+      <a *ngIf="!isAuthenticated" class="btn btn-primary btn-sm" routerLink="/auth">Sign In</a>
+      <button *ngIf="isAuthenticated" class="btn btn-outline btn-sm" (click)="logout()">Sign Out</button>
+    </div>
+  </div>
+</header>

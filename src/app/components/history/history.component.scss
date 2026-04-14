@@ -1,0 +1,116 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.history-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: $sp-8;
+  padding-bottom: $sp-4;
+  border-bottom: 1px solid $clr-border;
+
+  @include responsive(sm) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $sp-4;
+  }
+}
+
+.title-area {
+  .page-title {
+    font-size: 2rem;
+    color: $clr-txt;
+    margin-bottom: $sp-1;
+  }
+  .page-subtitle {
+    color: $clr-txt-muted;
+    font-size: 1rem;
+    margin: 0;
+  }
+}
+
+.filter-area {
+  width: 240px;
+  flex-shrink: 0;
+
+  @include responsive(sm) {
+    width: 100%;
+  }
+}
+
+.native-select-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.select-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: $clr-txt-muted;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.native-select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid $clr-border;
+  border-radius: $radius-md;
+  color: $clr-txt;
+  padding: 10px 36px 10px 14px;
+  font-size: 0.95rem;
+  font-family: $font-body;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+
+  option {
+    background: #1a1a2e;
+    color: $clr-txt;
+  }
+
+  &:hover {
+    border-color: $clr-primary;
+    background: rgba(255,255,255,0.09);
+  }
+
+  &:focus {
+    border-color: $clr-primary;
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.18);
+  }
+}
+
+.select-arrow {
+  position: absolute;
+  right: 12px;
+  bottom: 11px;
+  color: $clr-txt-muted;
+  pointer-events: none;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: $sp-4;
+
+  // Stagger animation for children
+  app-history-card {
+    animation: slide-up 0.4s backwards;
+    @for $i from 1 through 10 {
+      &:nth-child(#{$i}) { animation-delay: #{$i * 0.05}s; }
+    }
+  }
+}
+
+.mt-3 { margin-top: $sp-4; }

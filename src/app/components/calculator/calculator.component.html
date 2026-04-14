@@ -1,0 +1,96 @@
+<div class="calculator-container fade-in">
+  <!-- 1. Measurement Type Selection -->
+  <section class="calc-section">
+    <h2 class="section-title">1. Select Measurement Type</h2>
+    <app-type-selector
+      [selectedType]="selectedType"
+      (typeSelected)="onTypeChanged($event)">
+    </app-type-selector>
+  </section>
+
+  <!-- 2. Operation Selection -->
+  <section class="calc-section">
+    <h2 class="section-title">2. Select Operation</h2>
+    <app-operation-selector
+      [selectedOperation]="selectedOperation"
+      (operationSelected)="onOperationChanged($event)">
+    </app-operation-selector>
+  </section>
+
+  <!-- 3. Input Values -->
+  <section class="calc-section">
+    <h2 class="section-title">3. Enter Values</h2>
+    
+    <div class="inputs-container">
+      <!-- First Quantity -->
+      <app-quantity-input
+        label="First Quantity"
+        badge="Q1"
+        badgeClass="q1-badge"
+        [units]="currentUnits"
+        [value]="q1Value"
+        [unit]="q1Unit"
+        [valueError]="errors.q1value"
+        [unitError]="errors.q1unit"
+        (valueChange)="q1Value = $event"
+        (unitChange)="q1Unit = $event">
+      </app-quantity-input>
+
+      <!-- Operation Connector Icon -->
+      <div *ngIf="needsSecondOperation || needsTargetUnit" class="connector-icon">
+        <!-- Render appropriate connector based on operation -->
+        <ng-container [ngSwitch]="selectedOperation">
+          <span *ngSwitchCase="'add'">➕</span>
+          <span *ngSwitchCase="'subtract'">➖</span>
+          <span *ngSwitchCase="'divide'">➗</span>
+          <span *ngSwitchCase="'compare'">⚖️</span>
+          <span *ngSwitchCase="'convert'">🡢</span>
+          <span *ngSwitchDefault>⚡</span>
+        </ng-container>
+      </div>
+
+      <!-- Second Quantity (Conditional) -->
+      <app-quantity-input *ngIf="needsSecondOperation"
+        label="Second Quantity"
+        badge="Q2"
+        badgeClass="q2-badge"
+        [units]="currentUnits"
+        [value]="q2Value"
+        [unit]="q2Unit"
+        [valueError]="errors.q2value"
+        [unitError]="errors.q2unit"
+        (valueChange)="q2Value = $event"
+        (unitChange)="q2Unit = $event">
+      </app-quantity-input>
+
+      <!-- Target Unit (Conditional) -->
+      <app-quantity-input *ngIf="needsTargetUnit"
+        label="Target Unit"
+        badge="🎯"
+        badgeClass="target-badge"
+        [showValue]="false"
+        [units]="currentUnits"
+        [unit]="targetUnit"
+        [unitError]="errors.targetUnit"
+        (unitChange)="targetUnit = $event">
+      </app-quantity-input>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <button mat-raised-button color="primary" class="btn-calculate" 
+              (click)="onCalculate()" [disabled]="loading">
+        <span *ngIf="!loading">Calculate</span>
+        <mat-spinner *ngIf="loading" diameter="24"></mat-spinner>
+      </button>
+    </div>
+  </section>
+
+  <!-- 4. Result Panel -->
+  <app-result-panel
+    [result]="result"
+    [operation]="selectedOperation"
+    [error]="calculationError"
+    (closed)="onClearResult()">
+  </app-result-panel>
+</div>

@@ -1,0 +1,45 @@
+<div class="history-card" [ngClass]="['op-' + opKey]">
+
+  <!-- ── Header: badge + date ── -->
+  <div class="hc-header">
+    <div class="hc-badges">
+      <span class="badge op-badge">
+        <span class="icon">{{ opIcon }}</span>
+        {{ displayName }}
+      </span>
+      <span class="badge type-badge" *ngIf="category">
+        {{ category | titlecase }}
+      </span>
+      <span class="badge fail-badge" *ngIf="!succeeded">
+        ⚠ Failed
+      </span>
+    </div>
+    <div class="hc-date" *ngIf="dateStr">{{ dateStr | date:'MMM d, y, h:mm a' }}</div>
+  </div>
+
+  <!-- ── Body: input ➜ result ── -->
+  <div class="hc-body">
+    <div class="expr-wrap">
+      <!-- Input expression -->
+      <div class="expr-block input-expr">
+        <span class="expr-label">Input</span>
+        <span class="expr-value">{{ inputData }}</span>
+      </div>
+
+      <!-- Arrow -->
+      <div class="arrow-block" aria-hidden="true">➜</div>
+
+      <!-- Result -->
+      <div class="expr-block result-expr" [class.failed-result]="!succeeded">
+        <span class="expr-label">Result</span>
+        <span class="expr-value result-value">
+          <ng-container *ngIf="succeeded; else failedTpl">{{ resultData }}</ng-container>
+          <ng-template #failedTpl>
+            <span class="fail-text">{{ errorMsg || 'Error' }}</span>
+          </ng-template>
+        </span>
+      </div>
+    </div>
+  </div>
+
+</div>

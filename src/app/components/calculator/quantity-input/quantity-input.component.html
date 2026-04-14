@@ -1,0 +1,40 @@
+<div class="quantity-card">
+  <div class="quantity-label">
+    <span class="quantity-badge" [ngClass]="badgeClass">{{ badge }}</span>
+    <span>{{ label }}</span>
+  </div>
+  <div class="calc-row" [class.two-col]="showValue">
+    <!-- Value Input -->
+    <div class="native-input-wrapper" *ngIf="showValue">
+      <label class="input-label">Value</label>
+      <input type="number"
+             class="native-input"
+             [ngModel]="value" 
+             (ngModelChange)="onValueChange($event)"
+             [placeholder]="valuePlaceholder" 
+             step="any"
+             (wheel)="$event.preventDefault()"
+             [class.has-error]="valueError">
+      <div class="error-text" *ngIf="valueError">{{ valueError }}</div>
+    </div>
+
+    <!-- Unit Select -->
+    <div class="native-input-wrapper">
+      <label class="input-label">Unit</label>
+      <div class="select-container">
+        <select
+          class="native-select"
+          [ngModel]="unit" 
+          (ngModelChange)="onUnitChange($event)"
+          [class.has-error]="unitError">
+          <option value="">{{ unitPlaceholder }}</option>
+          <option *ngFor="let u of units" [value]="u.value">
+            {{ u.name }}
+          </option>
+        </select>
+        <span class="select-arrow">▾</span>
+      </div>
+      <div class="error-text" *ngIf="unitError">{{ unitError }}</div>
+    </div>
+  </div>
+</div>

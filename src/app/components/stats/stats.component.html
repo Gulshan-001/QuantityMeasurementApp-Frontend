@@ -1,0 +1,42 @@
+<div class="stats-page fade-in">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="title-area">
+      <h2 class="page-title">Operation Statistics</h2>
+      <p class="page-subtitle">Track your platform usage</p>
+    </div>
+    
+    <div class="summary-area" *ngIf="!loading && !error">
+      <div class="total-badge">
+        <span class="total-label">Total Operations</span>
+        <span class="total-val">{{ totalCount }}</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="page-body">
+    <!-- Loading State -->
+    <app-loading-spinner *ngIf="loading" message="Aggregating statistics..."></app-loading-spinner>
+
+    <!-- Error State -->
+    <app-empty-state *ngIf="!loading && error" 
+                     icon="⚠️" 
+                     title="Error Loading Stats" 
+                     [message]="error">
+      <button class="btn btn-outline mt-3" (click)="loadStats()">Try Again</button>
+    </app-empty-state>
+
+    <!-- Stats Grid -->
+    <div *ngIf="!loading && !error" class="stats-grid">
+      <app-stat-card 
+        *ngFor="let stat of stats"
+        [operation]="stat.op"
+        [icon]="stat.icon"
+        [count]="stat.count"
+        [color]="stat.color"
+        [colorSolid]="stat.colorSolid">
+      </app-stat-card>
+    </div>
+  </div>
+</div>

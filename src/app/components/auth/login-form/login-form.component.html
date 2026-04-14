@@ -1,0 +1,44 @@
+<form class="auth-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+  <!-- Email Field -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Email</mat-label>
+    <input matInput type="email" formControlName="email" placeholder="you@example.com" autocomplete="email">
+    <mat-error *ngIf="loginForm.get('email')?.hasError('required')">Email is required.</mat-error>
+    <mat-error *ngIf="loginForm.get('email')?.hasError('email')">Enter a valid email address.</mat-error>
+  </mat-form-field>
+
+  <!-- Password Field -->
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Password</mat-label>
+    <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password"
+           placeholder="••••••••" autocomplete="current-password">
+    <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+      <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+    <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Password is required.</mat-error>
+    <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">Password must be at least 6 characters.</mat-error>
+  </mat-form-field>
+
+  <!-- Error Message (Conditional Rendering) -->
+  <div class="form-error" *ngIf="errorMessage" role="alert">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Submit Button -->
+  <button mat-raised-button color="primary" type="submit" class="btn-submit"
+          [disabled]="loading">
+    <span *ngIf="!loading">Sign In</span>
+    <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+  </button>
+
+  <!-- Divider -->
+  <div class="divider">
+    <span>or continue with</span>
+  </div>
+
+  <!-- Google Sign-In Button -->
+  <div class="google-btn-wrapper">
+    <div #googleBtnRef class="google-btn-container"></div>
+  </div>
+</form>

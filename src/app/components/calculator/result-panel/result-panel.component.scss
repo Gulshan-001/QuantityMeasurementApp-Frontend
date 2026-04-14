@@ -1,0 +1,109 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.result-panel {
+  @include card-base;
+  margin-top: $sp-6;
+  border-color: $clr-success;
+  background: linear-gradient(135deg, hsla(145, 63%, 52%, 0.1), hsla(145, 63%, 52%, 0.02));
+  animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  &.has-error {
+    border-color: $clr-error;
+    background: linear-gradient(135deg, hsla(3, 85%, 62%, 0.1), hsla(3, 85%, 62%, 0.02));
+  }
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $sp-4 $sp-6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.result-title {
+  display: flex;
+  align-items: center;
+  gap: $sp-2;
+  font-size: 1.1rem;
+  margin: 0;
+
+  .has-error & { color: $clr-error; }
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: $clr-txt-muted;
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-md;
+  @include flex-center;
+  transition: all $tr-fast;
+
+  &:hover {
+    background: hsla(0, 0%, 100%, 0.1);
+    color: $clr-txt;
+  }
+}
+
+.result-body {
+  padding: $sp-8 $sp-6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.error-message {
+  color: $clr-error;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.simple-result {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: $sp-3;
+  flex-wrap: wrap;
+
+  .value {
+    font-family: $font-head;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1;
+    color: $clr-txt;
+    letter-spacing: -0.02em;
+  }
+
+  .unit {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: $clr-txt-muted;
+  }
+}
+
+.string-result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $sp-2;
+
+  .value {
+    font-family: $font-head;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: $clr-txt;
+    letter-spacing: -0.01em;
+  }
+}
+
+.complex-result {
+  font-size: 1.2rem;
+  font-weight: 500;
+}

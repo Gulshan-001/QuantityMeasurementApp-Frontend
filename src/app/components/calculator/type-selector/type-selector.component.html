@@ -1,0 +1,12 @@
+<div class="type-grid" role="group" aria-label="Select measurement type">
+  <!-- Dynamic rendering with *ngFor -->
+  <button *ngFor="let type of types"
+          class="type-card"
+          [class.active]="type.key === selectedType"
+          [attr.data-type]="type.key"
+          [attr.aria-selected]="type.key === selectedType"
+          (click)="onSelectType(type.key)">
+    <span class="type-icon">{{ type.icon }}</span>
+    <span class="type-name">{{ type.label }}</span>
+  </button>
+</div>
